@@ -1,10 +1,10 @@
-package me.behna.nearbyplace.repository.business
+package me.behna.nearbyplace.data.repository.business
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import me.behna.nearbyplace.api.YelpApiService
-import me.behna.nearbyplace.data.BusinessSearchResultModel
-import me.behna.nearbyplace.data.ErrorResultModel
-import me.behna.nearbyplace.repository.BaseRepository
+import me.behna.nearbyplace.data.api.YelpApiService
+import me.behna.nearbyplace.data.model.BusinessSearchResultModel
+import me.behna.nearbyplace.data.model.ErrorResultModel
+import me.behna.nearbyplace.data.repository.BaseRepository
 
 abstract class BaseBusinessRepository(api: YelpApiService) : BaseRepository() {
     abstract suspend fun searchForBusiness(

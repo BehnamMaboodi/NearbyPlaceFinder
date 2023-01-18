@@ -5,9 +5,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import me.behna.nearbyplace.api.YelpApiService
-import me.behna.nearbyplace.repository.business.BaseBusinessRepository
-import me.behna.nearbyplace.repository.business.BusinessRepository
+import me.behna.nearbyplace.data.api.YelpApiService
+import me.behna.nearbyplace.data.repository.business.BaseBusinessRepository
+import me.behna.nearbyplace.data.repository.business.BusinessRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)

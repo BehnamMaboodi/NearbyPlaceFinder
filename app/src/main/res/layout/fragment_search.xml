@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="me.behna.nearbyplace.viewmodel.SearchViewModel" />
+            type="me.behna.nearbyplace.presentation.viewmodel.SearchViewModel" />
 
         <import type="android.view.View" />
 
@@ -40,9 +40,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_search"
                     style="@style/SearchEditText"
-                    android:afterTextChanged="@{() -> viewModel.onSearchTextChanged()}"
+                    android:afterTextChanged="@{() -> viewModel.onSearchAddressChanged()}"
                     android:onEditorAction="@{(view, actionId, event) -> viewModel.onImeSearchClick(view, actionId, event)}"
-                    android:text="@={viewModel.queryToBeSearched}" />
+                    android:text="@={viewModel.addressToBeSearched}" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -66,7 +66,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="@string/results_for"
-                        android:visibility="@{ (viewModel.searchedQuery.length() == 0) ? View.GONE : View.VISIBLE }" />
+                        android:visibility="@{ (viewModel.searchedAddress.length() == 0) ? View.GONE : View.VISIBLE }" />
 
                     <com.google.android.material.chip.Chip
                         onCloseIconClick="@{() -> viewModel.clearResult()}"
@@ -74,9 +74,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="@{viewModel.searchedQuery}"
+                        android:text="@{viewModel.searchedAddress}"
                         android:textColor="@color/colorPrimaryDark"
-                        android:visibility="@{viewModel.searchedQuery.length() == 0 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.searchedAddress.length() == 0 ? View.GONE : View.VISIBLE}"
                         app:chipBackgroundColor="@color/colorPrimaryLight"
                         app:closeIconTint="@color/colorPrimaryDark"
                         app:closeIconVisible="true" />

@@ -1,4 +1,4 @@
-package me.behna.nearbyplace.api
+package me.behna.nearbyplace.data.api
 
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import me.behna.nearbyplace.BuildConfig

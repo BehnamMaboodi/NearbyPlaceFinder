@@ -1,4 +1,4 @@
-package me.behna.nearbyplace.ui
+package me.behna.nearbyplace.presentation.view
 
 import android.os.Bundle
 import android.view.Menu
@@ -8,9 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import me.behna.nearbyplace.R
-import me.behna.nearbyplace.base.BaseActivity
 import me.behna.nearbyplace.databinding.ActivityMainBinding
-import me.behna.nearbyplace.viewmodel.SearchViewModel
+import me.behna.nearbyplace.presentation.view.base.BaseActivity
+import me.behna.nearbyplace.presentation.viewmodel.SearchViewModel
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {

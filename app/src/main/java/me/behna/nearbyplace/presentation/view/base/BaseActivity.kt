@@ -1,4 +1,4 @@
-package me.behna.nearbyplace.base
+package me.behna.nearbyplace.presentation.view.base
 
 import androidx.appcompat.app.AppCompatActivity
 

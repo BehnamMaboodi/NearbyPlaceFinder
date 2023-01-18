@@ -1,8 +1,8 @@
-package me.behna.nearbyplace.api
+package me.behna.nearbyplace.data.api
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import me.behna.nearbyplace.data.BusinessSearchResultModel
-import me.behna.nearbyplace.data.ErrorResultModel
+import me.behna.nearbyplace.data.model.BusinessSearchResultModel
+import me.behna.nearbyplace.data.model.ErrorResultModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 

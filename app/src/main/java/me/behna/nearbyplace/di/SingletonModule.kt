@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.behna.nearbyplace.api.RetrofitInstance
-import me.behna.nearbyplace.api.YelpApiService
+import me.behna.nearbyplace.data.api.RetrofitInstance
+import me.behna.nearbyplace.data.api.YelpApiService
 import javax.inject.Singleton
 
 @Module

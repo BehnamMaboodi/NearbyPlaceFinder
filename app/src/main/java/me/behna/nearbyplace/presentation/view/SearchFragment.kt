@@ -1,22 +1,23 @@
-package me.behna.nearbyplace.ui
+package me.behna.nearbyplace.presentation.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
-import me.behna.nearbyplace.R
-import me.behna.nearbyplace.databinding.FragmentDetailBinding
+import me.behna.nearbyplace.databinding.FragmentSearchBinding
+import me.behna.nearbyplace.presentation.viewmodel.SearchViewModel
 
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * A simple [Fragment] subclass as the default destination in the navigation.
  */
 @AndroidEntryPoint
-class DetailFragment : Fragment() {
+class SearchFragment : Fragment() {
 
-    private var _binding: FragmentDetailBinding? = null
+    lateinit var viewModel: SearchViewModel
+    private var _binding: FragmentSearchBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,9 +26,12 @@ class DetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+    ): View {
+        viewModel = ViewModelProvider(requireActivity())[SearchViewModel::class.java]
+        _binding = FragmentSearchBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+            it.viewModel = viewModel
+        }
         return binding.root
 
     }
@@ -35,9 +39,6 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_DetailFragment_to_SearchFragment)
-        }
     }
 
     override fun onDestroyView() {

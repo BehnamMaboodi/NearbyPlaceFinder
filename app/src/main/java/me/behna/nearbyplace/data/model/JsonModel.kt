@@ -1,4 +1,4 @@
-package me.behna.nearbyplace.data
+package me.behna.nearbyplace.data.model
 
 import com.google.gson.Gson
 

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/SearchFragment"
-        android:name="me.behna.nearbyplace.ui.SearchFragment"
+        android:name="me.behna.nearbyplace.presentation.view.SearchFragment"
         android:label="@string/search_fragment"
         tools:layout="@layout/fragment_search">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/DetailFragment"
-        android:name="me.behna.nearbyplace.ui.DetailFragment"
+        android:name="me.behna.nearbyplace.presentation.view.DetailFragment"
         android:label="@string/detail_fragment_label"
         tools:layout="@layout/fragment_detail">
 
