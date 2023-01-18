@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import me.behna.nearbyplace.databinding.FragmentSearchBinding
 import me.behna.nearbyplace.viewmodel.SearchViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     lateinit var viewModel: SearchViewModel

@@ -5,12 +5,17 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import me.behna.nearbyplace.repository.business.BaseBusinessRepository
 import me.behna.nearbyplace.utilities.SystemUtils
+import javax.inject.Inject
 
-class SearchViewModel : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(private val repository: BaseBusinessRepository) :
+    ViewModel() {
     val queryToBeSearched = MutableStateFlow("")
     val searchedQuery = MutableStateFlow("")
     var delayedSearchJob: Job? = null

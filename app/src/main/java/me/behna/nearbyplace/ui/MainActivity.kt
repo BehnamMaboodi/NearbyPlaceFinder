@@ -3,15 +3,17 @@ package me.behna.nearbyplace.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import me.behna.nearbyplace.R
+import me.behna.nearbyplace.base.BaseActivity
 import me.behna.nearbyplace.databinding.ActivityMainBinding
 import me.behna.nearbyplace.viewmodel.SearchViewModel
 
-class MainActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: SearchViewModel
