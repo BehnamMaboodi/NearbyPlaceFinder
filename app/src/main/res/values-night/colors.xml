@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1a73e8</color>
-    <color name="colorPrimaryLight">#e8f0fe</color>
+    <color name="colorPrimaryDark">#2196F3</color>
+    <color name="colorPrimaryLight">@color/colorSheet</color>
     <color name="colorSecondary">#E24819</color>
     <color name="colorDiscount">@color/colorSecondary</color>
     <color name="colorSecondaryVariant">#DA6A49</color>
@@ -16,42 +16,39 @@
     <color name="colorTxtBlack">#7C000000</color>
     <color name="colorPrimaryTransparent">#252196F3</color>
 
-
-    <color name="colorIcon">#FF000000</color>
-    <color name="colorIconTransparent">#8a000000</color>
-    <color name="colorOnBackground">#8a000000</color>
+    <color name="colorIcon">#FFFFFFFF</color>
+    <color name="colorIconTransparent">#8affffff</color>
+    <color name="colorOnBackground">#FFFFFF</color>
     <color name="bg_header_item_card">#3E6E9C</color>
-    <color name="background">#ffffff</color>
-    <color name="colorSurface">#ffffff</color>
-    <color name="colorSheet">#ffffff</color>
+    <color name="background">#2b2b2e</color>
     <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorSurface">#2b2b2e</color>
+    <color name="colorOnSurface">#ffffff</color>
+    <color name="colorSheet">#353538</color>
     <color name="whiteTransparent">#30ffffff</color>
     <color name="whiteCaption">#bbffffff</color>
     <color name="green">#C600C853</color>
-    <color name="green_lite">#1700C853</color>
     <color name="red">#D50000</color>
-    <color name="yellow">#FA974B</color>
-    <color name="yellow_lite">#17FA974B</color>
+    <color name="yellow">#FFA662</color>
     <color name="sky_blue">#5FC9F8</color>
     <color name="bg_items_list">#474F68</color>
     <color name="black">#000000</color>
-    <color name="colorOnSurface">#8a000000</color>
     <color name="shadow">#33000000</color>
-    <color name="material_gray">#dadce0</color>
-    <color name="chip_outline">#dadce0</color>
-    <color name="material_gray_text">#5f6368</color>
+    <color name="chip_outline">#393B3E</color>
+    <color name="material_gray">#505255</color>
+    <color name="material_gray_text">#bcc0c5</color>
     <color name="gray">#727272</color>
     <color name="gray_light">#D1D1D1</color>
     <color name="gray_default">#80727272</color>
 
-    <color name="color_status_bar_23">#99fafafa</color>
+    <color name="color_status_bar_23">@color/colorSurface</color>
 
-    <color name="color_material_white_background">#fafafa</color>
+
+    <color name="color_material_white_background">#2b2b2e</color>
     <color name="color_material_text_black_transparent">#737373</color>
-    <color name="color_material_white_background_transparent">#99fafafa</color>
+    <color name="color_material_white_background_transparent">#99222222</color>
     <color name="color_material_white_background_dark">#e8e8e8</color>
     <color name="color_material_white_icon_deactivate">#909090</color>
     <color name="color_material_white_icon_disabled">#f5f5f5</color>
-
 
 </resources>
