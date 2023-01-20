@@ -3,6 +3,9 @@ package me.behna.nearbyplace.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.behna.nearbyplace.data.api.YelpApiService
 import me.behna.nearbyplace.data.model.BusinessModel
 import me.behna.nearbyplace.data.model.BusinessSearchResultModel
@@ -17,7 +20,8 @@ private const val BEER = "Beer"
 class BusinessPagingSource(
     private val api: YelpApiService,
     private val location: String,
-    private val sortBy: String?
+    private val sortBy: String?,
+    private val coroutineScope: CoroutineScope
 ) : PagingSource<HashMap<String, PagingKey>, BusinessModel>() {
 
     override suspend fun load(params: LoadParams<HashMap<String, PagingKey>>): LoadResult<HashMap<String, PagingKey>, BusinessModel> {
@@ -27,12 +31,24 @@ class BusinessPagingSource(
         var pizzaResponse: NetworkResponse<BusinessSearchResultModel, ErrorResultModel>? = null
         var beerResponse: NetworkResponse<BusinessSearchResultModel, ErrorResultModel>? = null
         // Load the next list if there are any items left (offset < total) and load a new list
-        if (pizzaKey.total == null || pizzaKey.offset < pizzaKey.total!!)
-            pizzaResponse =
-                api.searchForBusinesses(PIZZA, location, sortBy, params.loadSize, pizzaKey.offset)
-        if (beerKey.total == null || beerKey.offset < beerKey.total!!)
-            beerResponse =
-                api.searchForBusinesses(BEER, location, sortBy, params.loadSize, beerKey.offset)
+        val pizzaJob = coroutineScope.launch(Dispatchers.IO) {
+            if (pizzaKey.total == null || pizzaKey.offset < pizzaKey.total!!)
+                pizzaResponse =
+                    api.searchForBusinesses(
+                        PIZZA,
+                        location,
+                        sortBy,
+                        params.loadSize,
+                        pizzaKey.offset
+                    )
+        }
+        val beerJob = coroutineScope.launch(Dispatchers.IO) {
+            if (beerKey.total == null || beerKey.offset < beerKey.total!!)
+                beerResponse =
+                    api.searchForBusinesses(BEER, location, sortBy, params.loadSize, beerKey.offset)
+        }
+        pizzaJob.join()
+        beerJob.join()
         val nextKey = HashMap<String, PagingKey>()
         val prevKey = HashMap<String, PagingKey>()
         val mergedBusinessList = BusinessPagingUseCase.mergeLists(pizzaResponse, beerResponse)

@@ -6,6 +6,7 @@ import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import com.google.android.material.chip.Chip
 import com.google.android.material.textfield.TextInputLayout
+import me.behna.nearbyplace.data.model.ui_event.UiEvent
 
 
 @BindingMethods(
@@ -29,6 +30,7 @@ class BindingAdapters {
 
 
 @BindingAdapter(value = ["text"], requireAll = false)
-fun stringResBinding(view: TextView, stringRes: Int) {
-    view.setText(stringRes)
+fun stringResBinding(view: TextView, event: UiEvent<Any>) {
+    event.message?.let { view.text = it }
+    event.messageStringRes?.let { view.setText(it) }
 }

@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import me.behna.nearbyplace.R
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import me.behna.nearbyplace.data.UiString
 import me.behna.nearbyplace.data.model.BusinessModel
 import me.behna.nearbyplace.data.model.ui_event.UiEvent
 import me.behna.nearbyplace.domain.use_case.SearchForBusinessUseCase
@@ -16,10 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBusinessUseCase) :
     ViewModel() {
-    private var currentSearchResult: Flow<PagingData<BusinessModel>>? = null
-    val hintMessage = MutableStateFlow<UiEvent<Any>>(UiEvent.InvalidInput(R.string.search_hint))
-    private val _clearResultEvent = MutableSharedFlow<UiEvent.Refresh<Any>>()
-    val clearResultEvent: SharedFlow<UiEvent.Refresh<Any>> = _clearResultEvent
+    val searchFlow: MutableSharedFlow<Flow<PagingData<BusinessModel>>?> =
+        MutableStateFlow(null)
+
+    private var delayedSearchJob: Job? = null
+    val hintMessage = MutableStateFlow<UiEvent<Any>>(UiEvent.InvalidInput(UiString.SEARCH_HINT))
 
     val locationToBeSearched = MutableStateFlow("")
     val currentSearchedLocation = MutableStateFlow("")
@@ -27,35 +31,49 @@ class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBu
     fun clearEverything() {
         locationToBeSearched.update { "" }
         currentSearchedLocation.update { "" }
+        hintMessage.update { UiEvent.InvalidInput(UiString.SEARCH_HINT) }
         clearItems()
     }
 
-    fun clearItems() {
+    fun onAdapterStateChanged(event: UiEvent<Any>) {
         viewModelScope.launch {
-            _clearResultEvent.emit(UiEvent.Refresh())
+            hintMessage.emit(event)
         }
     }
 
+    fun clearItems() {
+        viewModelScope.launch { searchFlow.emit(null) }
+    }
 
-    fun search(): Flow<PagingData<BusinessModel>>? {
-        if (currentSearchedLocation.value == locationToBeSearched.value && currentSearchResult != null) {
-            return currentSearchResult as Flow<PagingData<BusinessModel>>
+
+    // will be called on input text changes
+    fun onSearchTermChange() {
+        delayedSearchJob?.cancel()
+        delayedSearchJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(500)
+            if (isActive) search()
         }
-        return when (searchUseCase.validateSearchTerm(locationToBeSearched.value)) {
+    }
+
+    suspend fun search() {
+        when (searchUseCase.validateSearchTerm(locationToBeSearched.value)) {
             is UiEvent.Error<*> -> {
                 hintMessage.update { it }
                 clearEverything()
-                null
+                return
             }
             is UiEvent.Success<*> -> {
                 clearItems()
                 currentSearchedLocation.update { locationToBeSearched.value }
-                currentSearchResult =
-                    searchUseCase(currentSearchedLocation.value).cachedIn(viewModelScope)
+                searchFlow.emit(
+                    searchUseCase(
+                        currentSearchedLocation.value,
+                        coroutineScope = viewModelScope
+                    ).cachedIn(viewModelScope)
+                )
                 hintMessage.update { UiEvent.Success() }
-                currentSearchResult as Flow<PagingData<BusinessModel>>
             }
         }
     }
-
 }
+
