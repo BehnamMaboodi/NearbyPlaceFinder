@@ -7,7 +7,13 @@
             name="viewModel"
             type="me.behna.nearbyplace.presentation.viewmodel.SearchViewModel" />
 
+        <variable
+            name="fragment"
+            type="me.behna.nearbyplace.presentation.view.SearchFragment" />
+
         <import type="android.view.View" />
+
+        <import type="me.behna.nearbyplace.data.model.ui_event.UiEvent" />
 
     </data>
 
@@ -20,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/color_material_white_background"
-            android:fitsSystemWindows="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
             app:liftOnScroll="true">
 
@@ -40,9 +45,12 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_search"
                     style="@style/SearchEditText"
-                    android:afterTextChanged="@{() -> viewModel.onSearchAddressChanged()}"
-                    android:onEditorAction="@{(view, actionId, event) -> viewModel.onImeSearchClick(view, actionId, event)}"
-                    android:text="@={viewModel.addressToBeSearched}" />
+                    android:afterTextChanged="@{() -> fragment.search()}"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="true"
+                    android:onEditorAction="@{(view, actionId, event) -> fragment.onImeSearchClick(view, actionId, event)}"
+                    android:text="@={viewModel.locationToBeSearched}" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -66,17 +74,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="@string/results_for"
-                        android:visibility="@{ (viewModel.searchedAddress.length() == 0) ? View.GONE : View.VISIBLE }" />
+                        android:visibility="@{ (viewModel.currentSearchedLocation.length() == 0) ? View.GONE : View.VISIBLE }" />
 
                     <com.google.android.material.chip.Chip
-                        onCloseIconClick="@{() -> viewModel.clearResult()}"
+                        onCloseIconClick="@{() -> viewModel.clearEverything()}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="@{viewModel.searchedAddress}"
+                        android:text="@{viewModel.currentSearchedLocation}"
                         android:textColor="@color/colorPrimaryDark"
-                        android:visibility="@{viewModel.searchedAddress.length() == 0 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.currentSearchedLocation.length() == 0 ? View.GONE : View.VISIBLE}"
                         app:chipBackgroundColor="@color/colorPrimaryLight"
                         app:closeIconTint="@color/colorPrimaryDark"
                         app:closeIconVisible="true" />
@@ -85,6 +93,14 @@
             </HorizontalScrollView>
         </com.google.android.material.appbar.AppBarLayout>
 
+
+        <com.google.android.material.textview.MaterialTextView
+            text="@{viewModel.hintMessage.messageStringRes}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:visibility="@{viewModel.hintMessage instanceof UiEvent.Error ? View.VISIBLE : View.GONE }" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -97,8 +113,9 @@
             android:paddingBottom="72dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:spanCount="2"
-            tools:itemCount="20" />
+            app:spanCount="1"
+            tools:itemCount="20"
+            tools:listitem="@layout/item_business" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -16,5 +16,14 @@
     <string name="distance">%.0fm away</string>
     <string name="closed">Closed</string>
     <string name="open">Open</string>
+    <string name="search_term_is_too_short">Search term is too short</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="network_error">Can\'t connect to network</string>
+    <string name="server_error">Server Error</string>
+    <string name="try_again">Try again</string>
+    <string name="no_places_found">No places found</string>
+    <string name="empty">Empty</string>
+    <string name="success">Success</string>
+    <string name="unknown_error">Unknown Error</string>
 
 </resources>

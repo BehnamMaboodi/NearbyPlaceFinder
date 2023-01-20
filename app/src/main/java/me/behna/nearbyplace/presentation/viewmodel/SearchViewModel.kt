@@ -1,66 +1,61 @@
 package me.behna.nearbyplace.presentation.viewmodel
 
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.haroldadmin.cnradapter.NetworkResponse
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
-import me.behna.nearbyplace.data.repository.business.BaseBusinessRepository
-import me.behna.nearbyplace.utilities.SystemUtils
-import timber.log.Timber
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import me.behna.nearbyplace.R
+import me.behna.nearbyplace.data.model.BusinessModel
+import me.behna.nearbyplace.data.model.ui_event.UiEvent
+import me.behna.nearbyplace.domain.use_case.SearchForBusinessUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: BaseBusinessRepository) :
+class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBusinessUseCase) :
     ViewModel() {
-    val addressToBeSearched = MutableStateFlow("")
-    val searchedAddress = MutableStateFlow("")
-    var delayedSearchJob: Job? = null
+    private var currentSearchResult: Flow<PagingData<BusinessModel>>? = null
+    val hintMessage = MutableStateFlow<UiEvent<Any>>(UiEvent.InvalidInput(R.string.search_hint))
+    private val _clearResultEvent = MutableSharedFlow<UiEvent.Refresh<Any>>()
+    val clearResultEvent: SharedFlow<UiEvent.Refresh<Any>> = _clearResultEvent
 
-    fun clearResult() {
-        addressToBeSearched.update { "" }
-        searchedAddress.update { "" }
+    val locationToBeSearched = MutableStateFlow("")
+    val currentSearchedLocation = MutableStateFlow("")
+
+    fun clearEverything() {
+        locationToBeSearched.update { "" }
+        currentSearchedLocation.update { "" }
+        clearItems()
     }
 
-    fun onSearchAddressChanged() {
-        delayedSearchJob?.cancel()
-        delayedSearchJob = viewModelScope.launch(Dispatchers.Main) {
-            delay(SEARCH_DELAY)
-            if (isActive) {
-                search()
+    fun clearItems() {
+        viewModelScope.launch {
+            _clearResultEvent.emit(UiEvent.Refresh())
+        }
+    }
+
+
+    fun search(): Flow<PagingData<BusinessModel>>? {
+        if (currentSearchedLocation.value == locationToBeSearched.value && currentSearchResult != null) {
+            return currentSearchResult as Flow<PagingData<BusinessModel>>
+        }
+        return when (searchUseCase.validateSearchTerm(locationToBeSearched.value)) {
+            is UiEvent.Error<*> -> {
+                hintMessage.update { it }
+                clearEverything()
+                null
+            }
+            is UiEvent.Success<*> -> {
+                clearItems()
+                currentSearchedLocation.update { locationToBeSearched.value }
+                currentSearchResult =
+                    searchUseCase(currentSearchedLocation.value).cachedIn(viewModelScope)
+                hintMessage.update { UiEvent.Success() }
+                currentSearchResult as Flow<PagingData<BusinessModel>>
             }
         }
     }
 
-    private fun search() {
-        viewModelScope.launch(Dispatchers.IO) {
-
-            val pizza =
-                repository.searchForBusiness("pizza", addressToBeSearched.value, null, 20, 0)
-            if (pizza is NetworkResponse.Success) {
-                if (pizza.body.businesses.isNotEmpty())
-                    Timber.w("pizza : " + pizza.body.businesses[0].name)
-            }
-        }
-        searchedAddress.update { addressToBeSearched.value }
-    }
-
-    fun onImeSearchClick(view: TextView, actionId: Int, event: KeyEvent?): Boolean {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            try {
-                SystemUtils.hideKeyboard(SystemUtils.getActivity(view.context))
-            } catch (_: Exception) {
-            }
-        }
-        return false
-    }
-
-    companion object {
-        private const val SEARCH_DELAY = 500L
-    }
 }

@@ -1,6 +1,7 @@
 package me.behna.nearbyplace.utilities.binding
 
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import com.google.android.material.chip.Chip
@@ -23,5 +24,11 @@ import com.google.android.material.textfield.TextInputLayout
         method = "setOnCloseIconClickListener"
     )
 )
-class BindingAdapter {
+class BindingAdapters {
+}
+
+
+@BindingAdapter(value = ["text"], requireAll = false)
+fun stringResBinding(view: TextView, stringRes: Int) {
+    view.setText(stringRes)
 }

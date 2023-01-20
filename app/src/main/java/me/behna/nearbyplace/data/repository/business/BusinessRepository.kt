@@ -1,21 +1,26 @@
 package me.behna.nearbyplace.data.repository.business
 
-import com.haroldadmin.cnradapter.NetworkResponse
-import me.behna.nearbyplace.data.api.RetrofitInstance.Companion.api
+import android.annotation.SuppressLint
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import me.behna.nearbyplace.data.api.YelpApiService
-import me.behna.nearbyplace.data.model.BusinessSearchResultModel
-import me.behna.nearbyplace.data.model.ErrorResultModel
+import me.behna.nearbyplace.data.model.BusinessModel
+import me.behna.nearbyplace.data.paging.BusinessPagingSource
+import me.behna.nearbyplace.utilities.Constants.SEARCH_BUSINESS_PAGE_SIZE
 
-class BusinessRepository(api: YelpApiService) : BaseBusinessRepository(api) {
+class BusinessRepository(private val api: YelpApiService) {
 
-    override suspend fun searchForBusiness(
-        term: String,
+    @SuppressLint("CheckResult")
+    fun getResultStream(
         location: String,
-        sortBy: String?,
-        limit: Int?,
-        offset: Int?
-    ): NetworkResponse<BusinessSearchResultModel, ErrorResultModel> {
-        return api.searchForBusinesses(term, location, sortBy, limit, offset)
+        sortBy: String?
+    ): Flow<PagingData<BusinessModel>> {
+        return Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = SEARCH_BUSINESS_PAGE_SIZE),
+            pagingSourceFactory = { BusinessPagingSource(api, location, sortBy) }
+        ).flow
     }
 
 }
