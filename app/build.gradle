@@ -75,7 +75,11 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation "androidx.activity:activity-ktx:1.7.0-alpha03"
 
-    
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    testImplementation "androidx.paging:paging-common-ktx:$paging_version"
+
+
     // Lifecycle extension
     def lifecycle_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
