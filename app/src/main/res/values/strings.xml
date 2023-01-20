@@ -13,4 +13,8 @@
     <string name="search">Search</string>
     <string name="search_fragment">Search</string>
     <string name="results_for">Results for</string>
+    <string name="distance">%.0fm away</string>
+    <string name="closed">Closed</string>
+    <string name="open">Open</string>
+
 </resources>

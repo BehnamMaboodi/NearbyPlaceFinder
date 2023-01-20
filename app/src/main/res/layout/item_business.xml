@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="business"
+            type="me.behna.nearbyplace.data.model.BusinessModel" />
+
+        <import type="android.view.View" />
+
+        <import type="me.behna.nearbyplace.utilities.TextUtils" />
+
+        <import type="me.behna.nearbyplace.utilities.Constants" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cart_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="@dimen/card_corner_radius">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingEnd="16dp"
+            android:paddingBottom="4dp">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:alignContent="space_between"
+                app:alignItems="center"
+                app:flexDirection="column"
+                app:flexWrap="wrap"
+                app:justifyContent="space_evenly">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:scaleType="centerCrop" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="48dp"
+                    android:orientation="horizontal"
+                    app:alignContent="center"
+                    app:alignItems="center"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    app:layout_flexBasisPercent="0%"
+                    app:layout_flexGrow="0"
+                    app:layout_wrapBefore="true">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@{business.name}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@null" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{TextUtils.INSTANCE.joinToString(business.categoryNames , Constants.INSTANCE.MAXIMUM_CATEGORY_NAME_IN_BUSINESS_ITEM)}"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_wrapBefore="true" />
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/BusinessLabel"
+                    android:layout_marginTop="8dp"
+                    android:text="@{business.displayPhone}"
+                    app:drawableStartCompat="@drawable/ic_phone_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/BusinessLabel"
+                    android:text="@{@string/distance(business.distance)}"
+                    app:drawableStartCompat="@drawable/ic_location_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/BusinessLabel"
+                    android:text="@{business.closed ? @string/closed : @string/open}"
+                    app:drawableStartCompat="@drawable/ic_calendar_24" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/BusinessLabel"
+                    android:text="@{business.location.address1}"
+                    app:drawableStartCompat="@drawable/ic_round_business_24" />
+
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

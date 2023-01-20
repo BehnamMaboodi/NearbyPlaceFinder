@@ -53,4 +53,18 @@
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
     </style>
+
+    <style name="BusinessLabel" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:textColor">@color/material_gray_text</item>
+        <item name="drawableTint">@color/colorIconTransparent</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="layout_flexBasisPercent">0%</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="layout_flexGrow">0</item>
+    </style>
 </resources>

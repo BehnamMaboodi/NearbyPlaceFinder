@@ -36,4 +36,9 @@ data class BusinessModel(
     val transactions: List<String> = listOf(),
     @SerializedName("url")
     val url: String = ""
-) : JsonModel()
+) : JsonModel() {
+
+
+    fun getCategoryNames(): List<String> = categories.map { it.title }
+
+}
