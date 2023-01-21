@@ -49,6 +49,7 @@ class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBu
 
     // will be called on input text change
     fun onSearchTermChange() {
+        clearItems()
         delayedJob {
             viewModelScope.launch(Dispatchers.Main) {
                 search()
@@ -64,7 +65,6 @@ class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBu
                 return
             }
             is UiEvent.Success<*> -> {
-                clearItems()
                 currentSearchedLocation.update { locationToBeSearched.value }
                 searchFlow.emit(
                     searchUseCase(
