@@ -5,14 +5,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import me.behna.nearbyplace.data.UiString
 import me.behna.nearbyplace.data.model.BusinessModel
 import me.behna.nearbyplace.data.model.ui_event.UiEvent
+import me.behna.nearbyplace.domain.use_case.DelayedJobUseCase
 import me.behna.nearbyplace.domain.use_case.SearchForBusinessUseCase
 import javax.inject.Inject
 
@@ -21,8 +23,7 @@ class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBu
     ViewModel() {
     val searchFlow: MutableSharedFlow<Flow<PagingData<BusinessModel>>?> =
         MutableStateFlow(null)
-
-    private var delayedSearchJob: Job? = null
+    val delayedJob = DelayedJobUseCase(viewModelScope, Dispatchers.Main)
     val hintMessage = MutableStateFlow<UiEvent<Any>>(UiEvent.InvalidInput(UiString.SEARCH_HINT))
 
     val locationToBeSearched = MutableStateFlow("")
@@ -46,16 +47,16 @@ class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBu
     }
 
 
-    // will be called on input text changes
+    // will be called on input text change
     fun onSearchTermChange() {
-        delayedSearchJob?.cancel()
-        delayedSearchJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(500)
-            if (isActive) search()
+        delayedJob {
+            viewModelScope.launch(Dispatchers.Main) {
+                search()
+            }
         }
     }
 
-    suspend fun search() {
+    private suspend fun search() {
         when (searchUseCase.validateSearchTerm(locationToBeSearched.value)) {
             is UiEvent.Error<*> -> {
                 hintMessage.update { it }
