@@ -69,7 +69,9 @@ class BusinessPagingSource(
                 nextKey = nextKey.ifEmpty { null }
             )
         }
-        return LoadResult.Error(BusinessPagingUseCase.getError(beerResponse, pizzaResponse))
+        return LoadResult.Error(
+            BusinessPagingUseCase.getError(beerResponse, pizzaResponse) ?: ErrorResultModel()
+        )
 
     }
 

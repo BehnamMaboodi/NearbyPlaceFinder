@@ -38,7 +38,7 @@ object BusinessPagingUseCase {
     }
 
 
-    fun getError(vararg response: NetworkResponse<BusinessSearchResultModel, ErrorResultModel>?): Throwable {
+    fun getError(vararg response: NetworkResponse<BusinessSearchResultModel, ErrorResultModel>?): Throwable? {
         response.forEach {
             if (it is NetworkResponse.NetworkError)
                 return IOException()
@@ -47,9 +47,11 @@ object BusinessPagingUseCase {
             if (it is NetworkResponse.ServerError)
                 return it.body ?: ErrorResultModel()
         }
-        return ErrorResultModel()
-
-
+        response.forEach {
+            if (it is NetworkResponse.Error)
+                return ErrorResultModel()
+        }
+        return null
     }
 
     fun mergeLists(vararg response: NetworkResponse<BusinessSearchResultModel, *>?): List<BusinessModel> {
