@@ -94,9 +94,14 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$dagger_version"
 
     // Test and debug
+    testImplementation(platform('org.junit:junit-bom:5.9.2'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    def kotest_version = "5.5.4"
+    testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
+    testImplementation "io.kotest:kotest-assertions-core:$kotest_version"
+    testImplementation "io.kotest:kotest-property:$kotest_version"
     implementation 'com.jakewharton.timber:timber:5.0.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
-    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
@@ -125,3 +130,10 @@ dependencies {
     }
 
 }
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
