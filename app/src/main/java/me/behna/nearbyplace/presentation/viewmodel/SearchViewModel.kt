@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,16 +13,18 @@ import kotlinx.coroutines.launch
 import me.behna.nearbyplace.data.UiString
 import me.behna.nearbyplace.data.model.BusinessModel
 import me.behna.nearbyplace.data.model.ui_event.UiEvent
+import me.behna.nearbyplace.di.DispatcherProvider
 import me.behna.nearbyplace.domain.use_case.DelayedJobUseCase
 import me.behna.nearbyplace.domain.use_case.SearchForBusinessUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBusinessUseCase) :
-    ViewModel() {
+class SearchViewModel @Inject constructor(
+    private val searchUseCase: SearchForBusinessUseCase
+) : ViewModel() {
     val searchFlow: MutableSharedFlow<Flow<PagingData<BusinessModel>>?> =
         MutableStateFlow(null)
-    val delayedJob = DelayedJobUseCase(viewModelScope, Dispatchers.Main)
+    val delayedJob = DelayedJobUseCase(viewModelScope, DispatcherProvider.Main)
     val hintMessage = MutableStateFlow<UiEvent<Any>>(UiEvent.InvalidInput(UiString.SEARCH_HINT))
 
     val locationToBeSearched = MutableStateFlow("")
@@ -37,21 +38,21 @@ class SearchViewModel @Inject constructor(private val searchUseCase: SearchForBu
     }
 
     fun onAdapterStateChanged(event: UiEvent<Any>) {
-        viewModelScope.launch {
+        viewModelScope.launch(DispatcherProvider.Main) {
             hintMessage.emit(event)
         }
     }
 
     fun clearItems() {
-        viewModelScope.launch { searchFlow.emit(null) }
+        viewModelScope.launch(DispatcherProvider.Main) { searchFlow.emit(null) }
     }
 
 
-    // will be called on input text change
+    // will be called on input text changes
     fun onSearchTermChange() {
         clearItems()
         delayedJob {
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(DispatcherProvider.IO) {
                 search()
             }
         }

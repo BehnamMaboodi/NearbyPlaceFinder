@@ -15,6 +15,14 @@ class SearchForBusinessUseCase(private val repository: BusinessRepository) : Use
         sortBy: String? = null,
         coroutineScope: CoroutineScope
     ): Flow<PagingData<BusinessModel>> {
+        return searchForBusiness(location, sortBy, coroutineScope)
+    }
+
+    fun searchForBusiness(
+        location: String,
+        sortBy: String? = null,
+        coroutineScope: CoroutineScope
+    ): Flow<PagingData<BusinessModel>> {
         return repository.getResultStream(location, sortBy, coroutineScope)
     }
 
